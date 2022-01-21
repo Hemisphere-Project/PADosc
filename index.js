@@ -62,7 +62,8 @@ function openMidi() {
     if (inputs.includes(inputName)) 
     {
         input = new easymidi.Input(inputName);
-        console.log(" OK")
+        console.log("OK")
+        console.log("")
         
         console.log('listen Player status on ', padIP, padPort)
         setInterval(sendPing, 3000)
@@ -75,6 +76,7 @@ function openMidi() {
             }
             else console.log('PAD', msg['note'])
         });
+        console.log("")
     }
     else setTimeout(openMidi, 2000)
 }
