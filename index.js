@@ -4,12 +4,14 @@ var osc = require("osc")
 var playerAddr = '10.0.0.10'
 // var playerAddr = '127.0.0.1'
 var playerPort = 3333
+
 var padPort = 4444
+var padIP = '10.0.0.200'
 
 var symbol = ''
 
 var udpPort = new osc.UDPPort({
-    localAddress: "0.0.0.0",
+    localAddress: padIP,
     localPort: padPort,
     metadata: true
 });
@@ -62,7 +64,7 @@ function openMidi() {
         input = new easymidi.Input(inputName);
         console.log(" OK")
         
-        console.log('listen Player status on ', padPort)
+        console.log('listen Player status on ', padIP, padPort)
         setInterval(sendPing, 3000)
 
         console.log('will send OSC to Player ',playerAddr, playerPort)
@@ -84,6 +86,25 @@ for (var k=0; k<127; k++) notes[k] = [0,0]
 // Bottom Row
 for (var k=36; k<127; k+=2) notes[k] = [Math.floor( (k-36)/16 )+1, Math.ceil((k-36)/2)%8+1 ]
 
-console.log('.:: PAD-osc ::.\n')
+console.clear()
+console.log('\n.:: PAD-osc ::.\n')
+
+// CHECK IP
+process.stdout.write('Checking network... ')
+const { networkInterfaces } = require('os');
+const { exit } = require('process');
+const nets = networkInterfaces();
+const results = []; // Or just '{}', an empty object
+for (const name of Object.keys(nets)) 
+    for (const net of nets[name]) 
+        if (net.family === 'IPv4' && !net.internal)
+            results.push(net.address);
+if (!results.includes(padIP)) {
+    console.log('\n\tERROR: you are not connected with static IP '+padIP)
+    console.log('\n')
+    exit(1)
+}
+else console.log('OK')
+
 process.stdout.write(`Looking for nanoPAD2... `)
 openMidi()
