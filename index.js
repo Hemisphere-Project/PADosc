@@ -29,25 +29,31 @@ udpPort.on('message', (msg, from)=>{
 })
 
 function sendPing() {
-    udpPort.send({
-        address: "/ping"
-    }, playerAddr, playerPort);
+    try {
+        udpPort.send({
+            address: "/ping"
+        }, playerAddr, playerPort);
+    }
+    catch(error){}
 }
 
 function sendPad(noteTuple) {
-    udpPort.send({
-        address: "/pad",
-        args: [
-            {
-                type: "i",
-                value:  noteTuple[0]
-            },
-            {
-                type: "i",
-                value:  noteTuple[1]
-            }
-        ]
-    }, playerAddr, playerPort);
+    try {
+        udpPort.send({
+            address: "/pad",
+            args: [
+                {
+                    type: "i",
+                    value:  noteTuple[0]
+                },
+                {
+                    type: "i",
+                    value:  noteTuple[1]
+                }
+            ]
+        }, playerAddr, playerPort);
+    }
+    catch(error){}
 }
 
 
