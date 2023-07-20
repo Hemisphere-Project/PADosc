@@ -28,6 +28,11 @@ udpPort.on('message', (msg, from)=>{
     }
 })
 
+udpPort.on('error', (error) => {
+    if (error.code == 'EHOSTDOWN' || error.code == 'EHOSTUNREACH' ) console.log("ERROR: Pi Player cannot be reached...");
+    else console.log("An error occurred: ", error);
+})
+
 function sendPing() {
     try {
         udpPort.send({
@@ -84,7 +89,7 @@ function openMidi() {
         });
         console.log("")
     }
-    else setTimeout(openMidi, 2000)
+    else setTimeout(openMidi, 1000)
 }
 
 var notes = []
